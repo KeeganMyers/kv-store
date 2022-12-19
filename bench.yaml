@@ -1,0 +1,19 @@
+config:
+  ensure:
+    p95: 1
+    p99: 5
+  target: "http://localhost:3000"
+  http:
+    pool: 50
+  phases:
+    - duration: 600
+      arrivalCount: 10000000
+
+scenarios:
+  - flow:
+    - post:
+        url: "/{{ $randomNumber(1,10000) }}-{{ $randomNumber(1,10000) }}-{{ $randomNumber(1,10000) }}"
+        json:
+          prop: "/{{ $randomNumber(1,10000) }}"
+    - expect:
+        - statusCode: 200
