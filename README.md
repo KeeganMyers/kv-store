@@ -1,9 +1,9 @@
 # KV Store API
 
-This is a proof of concept quality project intended to experiment with in memory concurrency optimized data structures. This example makes use of [Axum] (https://docs.rs/axum/latest/axum/) 
-and [evmap] (https://docs.rs/evmap/latest/evmap/index.html)
+This is a proof of concept quality project intended to experiment with in memory concurrency optimized data structures. This example makes use of [Axum](https://docs.rs/axum/latest/axum/) 
+and [evmap](https://docs.rs/evmap/latest/evmap/index.html)
 to build an API that allows CRUD operations on an in memory KV store. The major challenge of using an in memory data structure as a store is supporting concurrent reads/writes potentially across multiple threads with limited latency.
-In an attempt to achieve this goal I am passing a write handle wrapped in a Mutex [parking_lot] (https://docs.rs/parking_lot/0.12.1/parking_lot/index.html)  and a read handle factory to all crud handlers. Both of these implementations will block while waiting to acquire the lock however, this introduces a minimal amount of latency when compared to operations on a standard HashMap when the number of keys exceed 10 million. 
+In an attempt to achieve this goal I am passing a write handle wrapped in a Mutex [parking_lot](https://docs.rs/parking_lot/0.12.1/parking_lot/index.html)  and a read handle factory to all crud handlers. Both of these implementations will block while waiting to acquire the lock however, this introduces a minimal amount of latency when compared to operations on a standard HashMap when the number of keys exceed 10 million. 
 
 To minimize potential performance bottlenecks as the backing store grows I have implemented evmap in an eventually consistent manner. A call such as:
 
@@ -16,7 +16,7 @@ evmap. This improves overall performance but could have two potential side effec
 attempting to mutate the evmap. It is also possible (though unlikely) that users would be able to commit a value to the backing store then not immediately be able to fetch the value.
 
 ## TTL
-In order to facilitate a rudimentary ttl for each key in the evmap a [priority_queue] (https://docs.rs/priority-queue/latest/priority_queue/) is used when in the same background task that reconciles the evmap. If a ttl is set via a call such as:
+In order to facilitate a rudimentary ttl for each key in the evmap a [priority_queue](https://docs.rs/priority-queue/latest/priority_queue/) is used when in the same background task that reconciles the evmap. If a ttl is set via a call such as:
 
 ```bash
 curl -X POST localhost:3000/9996/10 -H "Content-Type: application/json" --data 1
@@ -27,7 +27,7 @@ be added to the current DateTime then inserted as the value for the key. The pri
 
 ## Benchmarks
  
-To approximate the overall performance of the api [Artillery] (https://www.artillery.io/) is being used. It can be installed with
+To approximate the overall performance of the api [Artillery](https://www.artillery.io/) is being used. It can be installed with
 
 ```bash
 npm install -g artillery
